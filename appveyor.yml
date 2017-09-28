@@ -1,0 +1,45 @@
+os: Visual Studio 2015
+
+configuration:
+- Release
+
+install:
+- ps: Start-FileDownload 'https://download.microsoft.com/download/8/F/9/8F9659B9-E628-4D1A-B6BF-C3004C8C954B/dotnet-1.1.1-sdk-win-x64.exe'
+- cmd: dotnet-1.1.1-sdk-win-x64.exe /quiet
+- cinst docfx -y
+
+environment:
+  PATH: $(PATH);$(PROGRAMFILES)\dotnet\
+
+build_script:
+  - cmd: SET STRONG_NAME_OPTIONS=/p:SignAssembly=true;AssemblyOriginatorKeyFile=Confluent.Kafka.snk;PackageId=Confluent.Kafka.StrongName;Title=Confluent.Kafka.StrongName;AssemblyName=Confluent.Kafka.StrongName;BaseOutputPath=bin-sn\
+  - appveyor-retry dotnet restore -v Minimal
+  - appveyor-retry dotnet restore -v Minimal test/Confluent.Kafka.StrongName.UnitTests/Confluent.Kafka.StrongName.UnitTests.csproj
+  - dotnet build Confluent.Kafka.sln -c %CONFIGURATION%
+  - dotnet build src/Confluent.Kafka/Confluent.Kafka.csproj -c %CONFIGURATION% %STRONG_NAME_OPTIONS%
+  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" (dotnet pack src/Confluent.Kafka/Confluent.Kafka.csproj -c %CONFIGURATION%  &  dotnet pack src/Confluent.Kafka/Confluent.Kafka.csproj -c %CONFIGURATION% %STRONG_NAME_OPTIONS%)
+  - cmd: IF NOT "%APPVEYOR_REPO_TAG%" == "true" (dotnet pack src/Confluent.Kafka/Confluent.Kafka.csproj -c %CONFIGURATION% --version-suffix ci-%APPVEYOR_BUILD_NUMBER%  &  dotnet pack src/Confluent.Kafka/Confluent.Kafka.csproj -c %CONFIGURATION% %STRONG_NAME_OPTIONS% --version-suffix ci-%APPVEYOR_BUILD_NUMBER%)
+  - docfx doc/docfx.json
+
+after_build:
+  - 7z a docs-%APPVEYOR_REPO_COMMIT%.zip doc/_site/*
+
+test_script:
+ - dotnet test -c %CONFIGURATION% --no-build test/Confluent.Kafka.UnitTests/Confluent.Kafka.UnitTests.csproj
+ - dotnet test -c %CONFIGURATION% test/Confluent.Kafka.StrongName.UnitTests/Confluent.Kafka.StrongName.UnitTests.csproj
+
+artifacts:
+  - path: ./src/Confluent.Kafka/bin*/Release/*.nupkg
+  - path: ./docs*.zip
+    name: docs
+
+deploy:
+  - provider: S3
+    access_key_id:
+      secure: 1CwAH4xAr+14pkeEBRd3CNdaWrustJaN83PEZVq407I=
+    secret_access_key:
+      secure: vXjAddNBH6D5FqC+Y3DqYykQaASQ+HQUEiFeYy59Vk71DmS5QgTIeZIRp18D0qZa
+    region: us-west-1
+    bucket: dotnet-ci
+    artifact: docs
+    set_public: true

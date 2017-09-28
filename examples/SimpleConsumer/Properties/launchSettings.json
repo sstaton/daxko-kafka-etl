@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SimpleConsumer": {
+      "commandName": "Project",
+      "commandLineArgs": "localhost:9092 test"
+    }
+  }
+}

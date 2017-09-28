@@ -48,6 +48,7 @@ namespace Confluent.Kafka.Examples.SimpleConsumer
 
                 while (true)
                 {
+                    //TODO Shaun pull from multiple queues, assemble inot single insert to combined table
                     Message<Null, string> msg;
                     if (consumer.Consume(out msg, TimeSpan.FromSeconds(1)))
                     {
@@ -56,6 +57,7 @@ namespace Confluent.Kafka.Examples.SimpleConsumer
                         //SqlCommand cmd = new SqlCommand("SELECT * FROM [dbo].[fact_location_member_checkin]", con);
                         SqlCommand cmd = new SqlCommand("INSERT INTO [dbo].[fact_location_member_checkin]            ([location_checkin_id]            ,[location_id]            ,[member_id]           ,[checkin_completed]           ,[location_name]           ,[member_first_name]           ,[member_last_name])     VALUES           (1           , 1           , 1           , '09/27/2017'           , 'HomeBranch'           , 'Shaun'           , 'Staton')", con);
 
+                        //TODO Shaun dynamic insert to combined table
                         int num = cmd.ExecuteNonQuery();
                         Console.WriteLine("num inserts: " + num);
 

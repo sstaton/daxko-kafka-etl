@@ -2,7 +2,7 @@
   "profiles": {
     "SimpleConsumer": {
       "commandName": "Project",
-      "commandLineArgs": "localhost:9092 test"
+      "commandLineArgs": "kafka-0-broker-0:9092,kafka-0-broker-1:9092,kafka-0-broker-2:9092 daxko-kafka-webapp-location-checkin-create"
     }
   }
 }

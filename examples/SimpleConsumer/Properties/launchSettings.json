@@ -4,7 +4,7 @@
       "commandName": "Project",
       "commandLineArgs": "localhost:9092 daxko-kafka-webapp-location-checkin-create",
       "environmentVariables": {
-        "brokers": "kafka-0-broker-0:9092,kafka-0-broker-1:9092,kafka-0-broker-2:9092",
+        "brokers": "localhost:9092",
         "topic": "daxko-kafka-webapp-location-checkin-create",
         "partition": "0",
         "offset": "0",

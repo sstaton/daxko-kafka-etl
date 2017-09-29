@@ -23,6 +23,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleConsumer", "examples\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleProducer", "examples\SimpleProducer\SimpleProducer.csproj", "{835A806F-D265-44CA-BA30-F71ABD33A1FC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dbo", "dbo", "{6181A4CF-FA35-491C-BC3C-57686E812B46}"
+	ProjectSection(SolutionItems) = preProject
+		src\dbo\CreateSCMTables.sql = src\dbo\CreateSCMTables.sql
+		src\dbo\DW_DDL.sql = src\dbo\DW_DDL.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -159,5 +165,6 @@ Global
 		{11FF917E-DBA7-4D5F-A407-9BFD6211E7E3} = {399116BF-334E-4F4F-BB63-F128707EBA85}
 		{25002C63-82EE-43BF-A63F-A3D01AC5D0F1} = {5E013DDE-CA17-4B15-B1CA-E262B67DBD6A}
 		{835A806F-D265-44CA-BA30-F71ABD33A1FC} = {5E013DDE-CA17-4B15-B1CA-E262B67DBD6A}
+		{6181A4CF-FA35-491C-BC3C-57686E812B46} = {59EE4CB4-41F6-4CE5-96ED-F5EAE0164417}
 	EndGlobalSection
 EndGlobal

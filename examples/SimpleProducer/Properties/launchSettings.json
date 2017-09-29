@@ -2,7 +2,7 @@
   "profiles": {
     "SimpleProducer": {
       "commandName": "Project",
-      "commandLineArgs": "localhost:9092 test"
+      "commandLineArgs": "localhost:9092 daxko-kafka-webapp-location-checkin-create"
     }
   }
 }

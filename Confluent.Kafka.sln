@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleProducer", "examples\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dbo", "dbo", "{6181A4CF-FA35-491C-BC3C-57686E812B46}"
 	ProjectSection(SolutionItems) = preProject
-		src\dbo\CreateSCMTables.sql = src\dbo\CreateSCMTables.sql
+		src\dbo\CheckinMessageToInsertStmts_SPCreate.sql = src\dbo\CheckinMessageToInsertStmts_SPCreate.sql
 		src\dbo\DW_DDL.sql = src\dbo\DW_DDL.sql
 	EndProjectSection
 EndProject

@@ -2,7 +2,14 @@
   "profiles": {
     "SimpleConsumer": {
       "commandName": "Project",
-      "commandLineArgs": "localhost:9092 daxko-kafka-webapp-location-checkin-create"
+      "commandLineArgs": "localhost:9092 daxko-kafka-webapp-location-checkin-create",
+      "environmentVariables": {
+        "brokers": "kafka-0-broker-0:9092,kafka-0-broker-1:9092,kafka-0-broker-2:9092",
+        "topic": "daxko-kafka-webapp-location-checkin-create",
+        "partition": "0",
+        "offset": "0",
+        "conn": "Data Source=kafka-checkins.cdn30frlb8j8.us-east-1.rds.amazonaws.com;Initial Catalog=kafka-dw;user=kafka_master;password=cd7Z7JpZyEvtIdV8ca00"
+      }
     }
   }
 }

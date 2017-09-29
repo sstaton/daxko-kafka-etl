@@ -32,19 +32,26 @@ namespace Confluent.Kafka.Examples.SimpleConsumer
     {
         public static void Main(string[] args)
         {
-            string brokerList = args[0];
-            var topics = args.Skip(1).ToList();
+            //string brokerList = args[0];
+            //var topics = args.Skip(1).ToList();
+
+            //var config = new Dictionary<string, object>
+            //{
+            //    { "group.id", "simple-csharp-consumer" },
+            //    { "bootstrap.servers", brokerList }
+            //};
 
             var config = new Dictionary<string, object>
             {
                 { "group.id", "simple-csharp-consumer" },
-                { "bootstrap.servers", brokerList }
+                { "bootstrap.servers", Environment.GetEnvironmentVariable("brokers") }
             };
 
             using (var consumer = new Consumer<Null, string>(config, null, new StringDeserializer(Encoding.UTF8)))
             {
-                consumer.Assign(new List<TopicPartitionOffset> { new TopicPartitionOffset(topics.First(), 0, 0) });
-
+                //consumer.Assign(new List<TopicPartitionOffset> { new TopicPartitionOffset(topics.First(), 0, 0) });
+                consumer.Assign(new List<TopicPartitionOffset> { new TopicPartitionOffset(Environment.GetEnvironmentVariable("topic"), Convert.ToInt32(Environment.GetEnvironmentVariable("partition")), Convert.ToInt32(Environment.GetEnvironmentVariable("offset"))) });
+                
                 //string jsonStuff = "{\"Id\":\"59cd626e41a567d0fcb7b550\",\"Timestamp\":\"2017-09-28T15:58:22.608862-05:00\",\"Content\":{\"Id\":\"a953d9da-fa9a-4034-9b01-1ce154003c2b\",\"Member\":{\"Id\":\"effdcdb4-7ebd-494c-bd74-606905a31547\",\"FirstName\":\"Jason\",\"LastName\":\"Little\"},\"Location\":{\"Id\":\"511006ca-f32e-438a-9034-cced82c0599b\",\"LocationName\":\"Ward, Leannon and Mills\"},\"CheckinCompleted\":\"2017-07-02T03:04:21.408729\"},\"CallbackName\":null}";
 
                 //JObject jo = JObject.Parse(jsonStuff);
@@ -64,7 +71,7 @@ namespace Confluent.Kafka.Examples.SimpleConsumer
                         //LocationCheckinData lcd = new LocationCheckinData(new Guid("AE45B6FA-E59B-422E-9E2D-87F25CA38820"),new Guid("AE45B6FA-E59B-422E-9E2D-87F25CA38820"),new Guid("AE45B6FA-E59B-422E-9E2D-87F25CA38820"), Convert.ToDateTime("9/28/2017"), "Shaunn", "Statonn", "HomeBranchh");
                         //Console.WriteLine(lcd.CheckinCompleted.ToString());
 
-                        SqlConnection con = new SqlConnection("Data Source=.\\playsqlexpress;Initial Catalog=kafka-dw;Integrated Security=true;");
+                        SqlConnection con = new SqlConnection(Environment.GetEnvironmentVariable("conn"));
 
                         con.Open();
 
@@ -77,16 +84,9 @@ namespace Confluent.Kafka.Examples.SimpleConsumer
                         cmd.Parameters.Add(new SqlParameter("first_name", obj.Content.Member.FirstName));
                         cmd.Parameters.Add(new SqlParameter("last_name", obj.Content.Member.LastName));
                         cmd.Parameters.Add(new SqlParameter("loc_name", obj.Content.Location.LocationName));
-                        //cmd.Parameters.Add(obj.Content.Id.ToString());
-                        //cmd.Parameters.Add(obj.Content.Member.Id.ToString());
-                        //cmd.Parameters.Add(obj.Content.Location.Id.ToString());
-                        //cmd.Parameters.Add(obj.Content.CheckinCompleted.ToString());
-                        //cmd.Parameters.Add(obj.Content.Member.FirstName);
-                        //cmd.Parameters.Add(obj.Content.Member.LastName);
-                        //cmd.Parameters.Add(obj.Content.Location.LocationName);
 
                         int num = cmd.ExecuteNonQuery();
-                        Console.WriteLine("num updated: " + num);
+                        Console.WriteLine("return value: " + num);
 
                         con.Close();
 

@@ -30,6 +30,16 @@ namespace Confluent.Kafka.Examples.SimpleConsumer
 {
     public class Program
     {
+        public static class EnvironmentVariables
+        {
+            public const string brokers="localhost:9092";
+            public const string topic="daxko-kafka-webapp-location-checkin-create";
+            public const string partition="0";
+            public const string offset="0";
+            public const string conn="Data Source=kafka-checkins.cdn30frlb8j8.us-east-1.rds.amazonaws.com;Initial Catalog=kafka-dw;user=kafka_master;password=cd7Z7JpZyEvtIdV8ca00";
+
+
+        }
         public static void Main(string[] args)
         {
             //string brokerList = args[0];
@@ -44,13 +54,13 @@ namespace Confluent.Kafka.Examples.SimpleConsumer
             var config = new Dictionary<string, object>
             {
                 { "group.id", "simple-csharp-consumer" },
-                { "bootstrap.servers", "localhost:9092" }
+                { "bootstrap.servers", EnvironmentVariables.brokers }
             };
 
             using (var consumer = new Consumer<Null, string>(config, null, new StringDeserializer(Encoding.UTF8)))
             {
                 //consumer.Assign(new List<TopicPartitionOffset> { new TopicPartitionOffset(topics.First(), 0, 0) });
-                consumer.Assign(new List<TopicPartitionOffset> { new TopicPartitionOffset("daxko-kafka-webapp-location-checkin-create", Convert.ToInt32(0), Convert.ToInt32(0)) });
+                consumer.Assign(new List<TopicPartitionOffset> { new TopicPartitionOffset(EnvironmentVariables.topic, Convert.ToInt32(EnvironmentVariables.partition), Convert.ToInt32(EnvironmentVariables.offset)) });
                 
                 //string jsonStuff = "{\"Id\":\"59cd626e41a567d0fcb7b550\",\"Timestamp\":\"2017-09-28T15:58:22.608862-05:00\",\"Content\":{\"Id\":\"a953d9da-fa9a-4034-9b01-1ce154003c2b\",\"Member\":{\"Id\":\"effdcdb4-7ebd-494c-bd74-606905a31547\",\"FirstName\":\"Jason\",\"LastName\":\"Little\"},\"Location\":{\"Id\":\"511006ca-f32e-438a-9034-cced82c0599b\",\"LocationName\":\"Ward, Leannon and Mills\"},\"CheckinCompleted\":\"2017-07-02T03:04:21.408729\"},\"CallbackName\":null}";
 
@@ -71,7 +81,7 @@ namespace Confluent.Kafka.Examples.SimpleConsumer
                         //LocationCheckinData lcd = new LocationCheckinData(new Guid("AE45B6FA-E59B-422E-9E2D-87F25CA38820"),new Guid("AE45B6FA-E59B-422E-9E2D-87F25CA38820"),new Guid("AE45B6FA-E59B-422E-9E2D-87F25CA38820"), Convert.ToDateTime("9/28/2017"), "Shaunn", "Statonn", "HomeBranchh");
                         //Console.WriteLine(lcd.CheckinCompleted.ToString());
 
-                        SqlConnection con = new SqlConnection("Data Source=kafka-checkins.cdn30frlb8j8.us-east-1.rds.amazonaws.com;Initial Catalog=kafka-dw;user=kafka_master;password=cd7Z7JpZyEvtIdV8ca00");
+                        SqlConnection con = new SqlConnection(EnvironmentVariables.conn);
 
                         con.Open();
 
